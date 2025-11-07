@@ -1,0 +1,5 @@
+cd ~/Documents
+zip -r dolphin_enrichment_clean.zip dolphin_enrichment \
+  -x "dolphin_enrichment/venv/*" \
+  -x "dolphin_enrichment/__pycache__/*" \
+  -x "*.pyc"

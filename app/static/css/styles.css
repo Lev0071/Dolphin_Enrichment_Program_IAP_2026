@@ -1,0 +1,59 @@
+/* Simple Bootstrap-like layout without external dependencies */
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    text-align: center;
+}
+
+/* Navbar styling */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0d6efd;
+    color: white;
+    padding: 0.5rem 1rem;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+}
+
+.navbar a:hover {
+    background-color: rgba(255,255,255,0.15);
+    border-radius: 4px;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.25rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Button styling */
+.btn {
+    display: inline-block;
+    background-color: #0d6efd;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 1rem;
+}
+
+.btn:hover {
+    background-color: #0b5ed7;
+}
+
+/* Container styling */
+.container {
+    margin-top: 3rem;
+}
