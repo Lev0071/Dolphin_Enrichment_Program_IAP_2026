@@ -1,0 +1,396 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Arial', sans-serif;
+  background-color: #f0f8ff; /* Light sky blue background */
+}
+
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr; /* Adjusted to make header dynamic */
+  height: 100vh;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: #0073a8; /* Ocean blue header */
+  color: white;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px; /* Increased padding for tabs */
+  height: 100%;
+  border-right: 1px solid #fff; /* White border for tab separation */
+  font-size: 18px; /* Increased font size */
+}
+
+.tab:last-child {
+  border-right: none; /* Remove the border from the last tab */
+}
+
+.main-content {
+  display: grid;
+  grid-template-columns: 2fr 3fr 2fr;
+  background-color: #e0f7fa; /* Light aqua background */
+}
+
+.left-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.left-panel button {
+  padding: 15px; /* Increased padding */
+  margin: 10px 0;
+  cursor: pointer;
+  background-color: #046d9e; /* Teal color for buttons */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+
+.console {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.lower-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 20px; /* Equal spacing between columns */
+  padding: 20px; /* Padding around the entire lower-content */
+}
+
+/* Left Settings Adjustments */
+.left-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Equal spacing between rows */
+  padding: 20px;
+ 
+  border-radius: 8px;
+
+}
+
+
+/* Consistent spacing within each section */
+.settings-row, .control-row {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Equal spacing between elements */
+}
+
+/* General Button and Input Spacing */
+.settings-row button, .control-row button {
+  margin-right: 10px;
+  padding: 10px;
+}
+
+/* Adjust the input size */
+.settings-row input, .control-row input {
+  flex: none; /* Prevent it from stretching to fill available space */
+  width: 150px; /* Set a fixed width for the input */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+
+
+
+.game-controls {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+/* General Control Row Styling */
+.control-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px; /* Spacing between control rows */
+}
+
+/* Styling for the Labels (distinguishing from buttons) */
+.control-row label {
+  margin-right: 15px; /* Space between label and input/button */
+  font-size: 16px; /* Label text size */
+  color: #004a6d; /* Deep blue color */
+  font-weight: 600; /* Bold for emphasis */
+}
+
+/* Styling for the Inputs */
+.control-row input[type="text"],
+.control-row input[type="number"] {
+  padding: 10px; /* Inner padding */
+  font-size: 16px; /* Input text size */
+  color: #333; /* Dark gray text */
+  background-color: #f0f8ff; /* Light blue background for inputs */
+  border: 2px solid #0073a8; /* Ocean blue border */
+  border-radius: 4px; /* Rounded corners */
+  width: 150px; /* Adjust width as necessary */
+  margin-right: 10px; /* Space between input and buttons */
+}
+
+.control-row input[type="text"]:focus,
+.control-row input[type="number"]:focus {
+  outline: none; /* Remove default focus outline */
+  border-color: #005f8d; /* Darker blue border on focus */
+  box-shadow: 0px 0px 4px rgba(74, 144, 226, 0.8); /* Light blue glow on focus */
+}
+
+/* Distinguishing Buttons */
+.control-row button {
+  padding: 10px 15px;
+  font-size: 14px; /* Slightly smaller than inputs */
+  font-weight: bold;
+  background-color: #0073a8; /* Ocean blue */
+  color: #fff; /* White text */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.control-row button:hover {
+  background-color: #005f8d; /* Darker on hover */
+}
+
+.control-row button:active {
+  background-color: #004a6d; /* Even darker on active */
+}
+
+.logos {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 0;
+}
+
+.logo {
+  padding: 30px;
+  text-align: center;
+}
+
+.ai-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.button {
+  display: inline-block;
+  width: 150px;
+  padding: 10px 15px; /* Adjusted padding */
+  font-size: 16px; /* Increased font size */
+  font-weight: 500; /* Slightly bolder */
+  color: #fff; /* White text */
+  background-color: #0073a8; /* Ocean blue for buttons */
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.button:hover {
+  background-color: #005f8d; /* Darker ocean blue on hover */
+}
+
+.button:active {
+  background-color: #004a6d; /* Even darker on active */
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0px 0px 4px rgba(74, 144, 226, 0.8);
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 15px; /* Increased gap between buttons */
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.connected_button, .toggle_button {
+  display: inline-block;
+  width: 150px;
+  height: 130px;
+  padding: 10px 15px; /* Adjusted padding */
+  font-size: 16px; /* Increased font size */
+  font-weight: 500; /* Slightly bolder */
+  color: #fff; /* White text */
+  background-color: #0073a8; /* Ocean blue for buttons */
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.connected_button:hover, .toggle_button:hover {
+  background-color: #005f8d; /* Darker blue on hover */
+}
+
+.connected_button:active, .toggle_button:active {
+  background-color: #004a6d; /* Even darker on active */
+}
+
+.connected_button:focus, .toggle_button:focus {
+  outline: none;
+  box-shadow: 0px 0px 4px rgba(74, 144, 226, 0.8);
+}
+
+/* Mobile Adjustments */
+@media only screen and (max-width: 768px) {
+  .main-content {
+    grid-template-columns: 1fr; /* Stack columns on mobile */
+  }
+
+  .header {
+    grid-template-columns: 1fr; /* Stack header tabs */
+  }
+
+  .logos {
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .keypad {
+    grid-template-columns: repeat(2, 1fr); /* Display keypad in 2 columns */
+    padding: 10px;
+  }
+
+  .connected_button, .toggle_button {
+    padding: 20px; /* Reduce button padding for mobile */
+    font-size: 16px; /* Slightly reduce font size */
+  }
+
+  .lower-content {
+    grid-template-columns: 1fr; /* Stack lower content sections */
+  }
+
+  .left-panel, .left-settings, .game-controls {
+    padding: 10px; /* Reduce padding for smaller screens */
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .keypad {
+    grid-template-columns: 1fr; /* Stack keypad buttons on smaller screens */
+  }
+
+  .connected_button, .toggle_button {
+    padding: 15px; /* Further reduce padding */
+    font-size: 14px; /* Smaller font for mobile */
+  }
+}
+
+/* Navbar styling */
+/* .navbar.navbar--research{
+  height: 84px !important;
+  min-height: 84px !important;
+  max-height: 84px !important;
+}
+
+/* One capsule wrapping BOTH logos */
+.brand-capsule{
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+
+  height: 60px;
+  padding: 10px 14px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.14);
+  border: 1px solid rgba(255,255,255,0.25);
+
+  text-decoration: none;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.brand-capsule:hover{
+  background: rgba(255,255,255,0.20);
+  transform: translateY(-1px);
+}
+
+.brand-capsule:active{
+  transform: translateY(0px);
+}
+
+/* Divider inside the capsule */
+.capsule-divider{
+  width: 1px;
+  height: 34px;
+  background: rgba(255,255,255,0.35);
+}
+
+/* Logos bigger */
+.brand-logo{
+  display: block;
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Griffith badge stays “squared but rounded” */
+.logo-griffith{
+  width: 44px;
+  border-radius: 12px;
+  background: #c30000;
+  padding: 6px;
+}
+
+/* SeaWorld stays “pill-ish” inside the capsule */
+.logo-seaworld{
+  height: 36px;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px 12px;
+}
+
+/* Clickable title */
+.brand-title-link{
+  margin-left: 12px;
+  color: #fff;
+  text-decoration: none;
+
+  font-weight: 700;
+  font-size: 18px;
+  white-space: nowrap;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.brand-title-link:hover{
+  background: rgba(255,255,255,0.12);
+}
+
+
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+}
+
+.nav-links a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+} */

@@ -1,0 +1,21 @@
+Create package structure inside PyFlaskServer:
+PyFlaskServer/
+  app/
+    __init__.py
+    routes.py
+  templates/
+  static/
+  config.py
+  run.py
+  integratev1.py
+
+Integration:
+https://chatgpt.com/c/6937dcde-4f24-8328-b482-e0fefec7dea8
+
+Integration support:
+https://chatgpt.com/c/6937e0f0-bd70-832f-bd18-3a64517591a3
+
+| Label                        | Meaning                          | Shorthand reference
+| ---------------------------- | -------------------------------- |--------------------------------
+| **Legacy Monolith**          | integratev1.py version           |System A
+| **Modular Blueprint System** | dolphin_enrichment-style project |System B

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dolphin Enrichment - Home</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background: #f8f9fa;
+          margin: 0;
+          padding: 0;
+        }
+        header {
+          background: #0d6efd;
+          color: white;
+          padding: 0.8rem 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+    s</style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="{{ url_for('main.index') }}"> Dolphin Enrichment Program – Prototype </a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('main.dashboard') }}">Check Pripheral Devices</a>
+            <a href="{{ url_for('main.layout') }}">Layout Editor</a>
+        </div>
+    </nav>
+
+  <header>
+    <h2>Home</h2>
+  </header>
+
+    <!-- Main content -->
+    <div class="container">
+        <h1>Welcome to the Dolphin Enrichment System</h1>
+        <p>Manage interactive devices, monitor button inputs, and test I2C communication.</p>
+        <!--<a class="btn" href="{{ url_for('main.dashboard') }}">Go to Dashboard</a>-->
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Layout</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesDEV.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="tab">Home tab?</div>
+            <div class="tab">Joystick tab?</div>
+            <div class="tab"></div>
+            <div class="tab"></div>
+        </div>
+        <div class="main-content">
+            <div class="left-panel">
+                <button class="button">Restart Pi</button>
+                <button class="button">Reset Buttons</button>
+                <button class="button">Reset Program</button>
+                <button class="button">Shutdown</button>
+            </div>
+            <div class="keypad">
+                <div class="grid">
+                    {% for i in range(3) %}
+                    <div class="row">
+                        {% for j in range(3) %}
+                        {% set index = i * 3 + j %}
+                        <form action="{{ url_for('button_click_server', button_id=index) }}" method="POST" style="display: inline">
+                            <button type="submit" class="cell">
+                                {{ index + 1 }} is {% if serverdata.button_states[index] == 1 %} on{% else %} off{% endif %}
+                            </button>
+                        </form>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="console">
+                {{serverdata.logging_message}}
+                <br>
+                {{serverdata.buttons}}
+                <br>
+                e 
+
+                <div id="message"> </div>
+                <script type="text/javascript">
+                    
+                    if(typeof(EventSource)!=="undefined"){
+                    var source = new EventSource("/stream")
+                    
+                    source.onmessage=function(event){
+                        var message=document.getElementById("message")
+                        message.innerHTML=event.data
+                    };
+                }else{
+                    console.log("Your browser doesn't support SSE")
+                }
+                    
+                </script>
+            </div>
+        </div>
+        <div class="lower-content">
+            <div class="left-settings">
+                <div class="settings-row">
+                    <button>Hose Override</button>
+                    <input type="text" readonly="readonly" value={{serverdata.hose_override}}>
+                    <form action="{{url_for('toggle_override')}}" method="POST"><button class="button">Toggle</button></form>
+
+                </div>
+
+                <div class="settings-row">
+                    <button>Hose Time</button>
+                    <form action="{{url_for('change_hose_time_flask_route')}}" method="POST">                     
+                        <input type="number" id="hose_time" name="hose_time" value={{serverdata.hose_time}}>
+                        <button class="button" type="submit">Set</button>
+                     </form>
+                </div>
+
+                <div class="game-controls">
+                    <div class="control-row">
+                        <button>Random Game</button>
+                        <input type="text" readonly="readonly" value={{serverdata.game_status}}>
+                    </div>
+                    <div class="control-row">
+                        <a href="/start_random_game" class="button"> Start </a>
+                        <a href="/stop_random_game" class="button"> Stop </a>
+                    </div>
+
+                    <div class="settings-row">
+                        <button>Co-Op Button Time</button>
+                        <form action="{{url_for('change_coop_button_time')}}" method="POST">  
+                        <input type="number" id="coop_button_time" name="coop_button_time" value={{serverdata.coop_button_time}}>
+                        <button class="button" >Set</button>
+                    </form>
+                    </div>
+                    <div class="control-row">
+                        <button>Co-Op Game</button>
+                        <input type="text" readonly="readonly" value={{serverdata.coop_game_status}}>
+                    </div>
+                    <div class="control-row">
+                        <a href="/start_coop_game" class="button"> Start </a>
+                        <a href="/stop_coop_game" class="button"> Stop </a>
+                    </div>
+                </div>
+                <div class="logos">
+                    <div class="logo">Logos?</div>
+                    <div class="logo">Logos?</div>
+                </div>
+            </div>
+            <div class="ai-section">Dolphin AI recognition / Pictures?</div>
+        </div>
+    </div>
+</body>
+</html>

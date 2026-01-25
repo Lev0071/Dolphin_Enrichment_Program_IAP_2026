@@ -1,0 +1,13 @@
+Zip on Windows ( Windows PowerShell):
+Compress-Archive -Path PyFlaskServer          
+   -DestinationPath PyFlaskServer_clean.zip    
+   -CompressionLevel Optimal                   
+   -Exclude "__pycache__", "*.pyc", "*.pyo",   
+            "venv", ".vscode", ".idea"         
+
+Zip Raspberry Pi (Linux):
+ zip -r PyFlaskServer_clean.zip PyFlaskServer  
+   -x "PyFlaskServer/venv/*"                   
+   -x "PyFlaskServer/__pycache__/*"           
+   -x "*.pyc" "*.pyo"                          
+   -x "*/.vscode/*" "*/.idea/*"                

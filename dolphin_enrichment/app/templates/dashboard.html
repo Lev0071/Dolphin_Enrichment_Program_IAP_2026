@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I2C Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        body {
+          font-family: Arial, sans-serif;
+          background: #f8f9fa;
+          margin: 0;
+          padding: 0;
+        }
+        header {
+          background: #0d6efd;
+          color: white;
+          padding: 0.8rem 1rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+      </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <a href="{{ url_for('main.index') }}"> Dolphin Enrichment Program – Prototype </a>
+        </div>
+        <div class="nav-links">
+            <a href="{{ url_for('main.dashboard') }}">Check Pripheral Devices</a>
+            <a href="{{ url_for('main.layout') }}">Layout/Positions Editor</a>
+        </div>
+    </nav>
+
+  <header>
+    <h2>I2C Devices on the Bus</h2>
+  </header>
+    <!-- show flashed messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul>
+          {% for category, msg in messages %}
+            <li><strong>{{ category }}:</strong> {{ msg }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    {% if devices %}
+	  <a href="{{ url_for('main.trigger_all', addresses=address_range | join(','), value=1) }}">Ping All devices</a>
+      <table border="1" cellpadding="5">
+          <tr>
+              <th>Address</th>
+              <th>Reachable</th>
+              <th>Last Read</th>
+              <th>Actions</th>
+          </tr>
+          {% for d in devices %}
+          <tr>
+              <td>{{ d.address }}</td>
+              <td>{{ "yes" if d.reachable else "no" }}</td>
+              <td>{{ d.value }}</td>
+              <td>
+                  <!-- send 1 as a test command -->
+                  <a href="{{ url_for('main.trigger', addr=d.address|int(base=16), value=1) }}">Send 1</a>
+              </td>
+          </tr>
+          {% endfor %}
+      </table>
+    {% else %}
+      <p style="color: red; font-weight: bold;">No I2C devices detected or bus not responding.</p>
+      <p>Try running <code>sudo i2cdetect -y 5</code> on your Pi to confirm hardware.</p>
+    {% endif %}
+</body>
+</html>

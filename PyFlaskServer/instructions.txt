@@ -1,0 +1,33 @@
+Automatic execution:
+--------------------
+Get the code into the correct directory (/PyFlaskServer)
+
+Write out code in this dir (~/Desktop/Pyflask) Then copy it over using
+sudo cp * -rf /PyFlaskServer
+
+now go to the PyFlaskServer directory and give execute privelages to the executable file (Right now it's integratev1.py)
+chmod +x /PyFlaskServer/integratev1.py
+
+Then restart the daemon with
+sudo systemctl daemon-reload
+sudo systemctl enable pyflaskserver.service
+sudo systemctl start pyflaskserver.service
+
+
+#-------------------------------------------------------------------------------------------------------------------------------
+Manual execution:
+-----------------
+cd /home/dep/PyFlaskServer
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Install system-level hardware dependencies
+sudo apt install python3-smbus python3-gpiozero -y
+
+# Run the server
+python3 run.py --host=0.0.0.0

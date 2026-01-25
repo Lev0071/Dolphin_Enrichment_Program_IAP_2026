@@ -1,0 +1,53 @@
+/home/dep/dolphin_enrichment/
+│
+├── app/
+│   ├── __init__.py
+│   ├── routes.py
+│   │
+│   ├── hardware/
+│   │   ├── i2c_slaves/                  # code for slave devices
+│   │   │   └── slave.ino
+│   │   ├── i2c_manager.py
+│   │   ├── led_control.py
+│   │   ├── solenoid_driver.py
+│   │   └── button_monitor.py
+│   │
+│   ├── utils/
+│   │   └── layout_manager.py            # helper that loads XML
+│   │
+│   ├── templates/
+│   │   ├── index.html
+│   │   ├── dashboard.html
+│   │   └── layout.html                  # editor page at /layout
+│   │
+│   └── static/
+│       ├── css/
+│       │   └── styles.css
+│       │
+│       └── js/
+│
+├── ui_layout/
+│   └── button_layout.xml                # created automatically on first save
+│
+├── config.py                            # contains I2C_BUS_ID and I2C_ADDRESS_RANGE
+├── run.py
+└── requirements.txt
+
+
+
+Test_1:
+cd /home/dep/dolphin_enrichment
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+sudo apt install python3-smbus python3-gpiozero -y
+python run.py --host=0.0.0.0
+
+Then from your laptop browser (same Wi-Fi):
+http://raspberrypiDEP.local:5000/dashboard
+
+source: https://chatgpt.com/c/690b0728-b5fc-8321-bdf2-52ec0d3648be
+assist: https://chatgpt.com/c/690b3d7a-73a4-8320-bc03-e47731072664
+assist_2: https://chatgpt.com/c/690cb54c-2b84-8323-bc7c-0afadec5954b
+
+https://chatgpt.com/c/690e0ed1-54c8-8323-a6a4-74f7bd201f7a

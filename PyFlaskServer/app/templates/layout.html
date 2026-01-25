@@ -1,0 +1,317 @@
+{% extends "base.html" %}
+
+{% block title %}Layout Editor - Dolphin Enrichment Program (iter_iv){% endblock %}
+
+{% block extra_head %}
+
+    <style>
+        body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        }
+        header {
+        background: #0d6efd;
+        color: white;
+        padding: 0.8rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        }
+        .canvas {
+        position: relative;
+        width: 90%;
+        height: 75vh;
+        margin: 2rem auto;
+        border: 2px dashed #ccc;
+        background: white;
+        overflow: hidden;
+        border-radius: 8px;
+        }
+        .device {
+        position: absolute;
+        text-align: center;
+        padding: 0.3rem 0.6rem;
+        border-radius: 8px;
+        cursor: grab;
+        font-size: 0.85rem;
+        transform: translate(-50%, -50%);
+        user-select: none;
+        }
+        .device.button {
+        background-color: #0d6efd;
+        color: white;
+        }
+        .device.other {
+        background-color: #dc3545;
+        color: white;
+        }
+        .device.selected {
+        outline: 3px solid #ffc107;
+        z-index: 10;
+        }
+        .sidebar {
+        width: 90%;
+        margin: 1rem auto;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+        }
+        button {
+        margin-top: 0.5rem;
+        padding: 0.4rem 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #198754;
+        color: white;
+        }
+        button:hover {
+        background-color: #157347;
+        }
+        .btn-danger { background: #dc3545; }
+        .btn-danger:hover { background: #bb2d3b; }
+        select, input {
+        margin: 0.2rem;
+        padding: 0.3rem;
+        }
+    </style>
+
+    <link rel="stylesheet" type="text/css"
+          href="{{ url_for('static', filename='styles_iteration_iv_v2.css') }}">
+
+    <!-- any extra <script> we have in <head> originally can stay here -->
+{% endblock %}
+
+{% block body %}
+
+  <div class="canvas" id="canvas">
+    {% for d in current_devices %}
+      <div
+        class="device {{ d.type }}"
+        style="
+          left: {{ d.x_pct * 100 }}%;
+          top: {{ d.y_pct * 100 }}%;
+          background-color: {{ d.color }};
+          border-radius: {% if d.shape == 'circle' %}50%{% else %}8px{% endif %};
+        "
+        data-id="{{ d.id }}"
+        data-addr="{{ d.i2c_address }}"
+        data-type="{{ d.type }}"
+        data-x_pct="{{ d.x_pct }}"
+        data-y_pct="{{ d.y_pct }}"
+      >
+        {{ d.name }}
+      </div>
+    {% endfor %}
+    </div>
+
+    <div class="sidebar">
+        <h3>Add New Device</h3>
+        <form id="addForm">
+        <label>Type:</label>
+        <select id="type">
+            <option value="button">Button</option>
+            <option value="other">Other</option>
+        </select>
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="e.g. Feed Button">
+        <label>Address:</label>
+        <select id="addr">
+            {% for addr in free_addrs %}
+            <option value="{{ addr }}">{{ addr }}</option>
+            {% endfor %}
+        </select>
+        <label>Color:</label>
+        <input type="color" id="color" value="#0d6efd">
+        <br>
+        <button type="button" id="addDevice">Add</button>
+        <button type="button" id="deleteDevice" class="btn-danger">Delete Selected</button>
+        <button type="button" id="saveLayout" style="background:#0d6efd;">Save Layout</button>
+        </form>
+    </div>
+
+{% endblock %}
+
+
+{% block extra_scripts %}
+    <script>
+    const canvas = document.getElementById("canvas");
+    const addrSelect = document.getElementById("addr");
+    const saveUrl = "{{ url_for('main.save_layout') }}";
+
+    let selected = null;
+    let isDragging = false;
+
+    function removeAddressFromSelect(addr) {
+        const opts = Array.from(addrSelect.options);
+        const match = opts.find(o => o.value === addr);
+        if (match) {
+        addrSelect.removeChild(match);
+        }
+    }
+
+    function addAddressToSelect(addr) {
+        const opts = Array.from(addrSelect.options);
+        const exists = opts.some(o => o.value === addr);
+        if (!exists) {
+        const opt = document.createElement("option");
+        opt.value = addr;
+        opt.textContent = addr;
+        addrSelect.appendChild(opt);
+        }
+    }
+
+    // select + start drag
+    canvas.addEventListener("mousedown", e => {
+        if (e.target.classList.contains("device")) {
+        if (selected && selected !== e.target) {
+            selected.classList.remove("selected");
+        }
+        selected = e.target;
+        selected.classList.add("selected");
+        isDragging = true;
+        } else {
+        if (selected) {
+            selected.classList.remove("selected");
+            selected = null;
+        }
+        isDragging = false;
+        }
+    });
+
+    // stop drag
+    window.addEventListener("mouseup", () => {
+        isDragging = false;
+    });
+
+    // drag while mouse down
+    window.addEventListener("mousemove", e => {
+        if (!selected || !isDragging) return;
+        const rect = canvas.getBoundingClientRect();
+        
+        let  x = ((e.clientX - rect.left) / rect.width) * 100;
+        let  y = ((e.clientY - rect.top) / rect.height) * 100;
+        
+        // clamp to [0, 100]
+        x = Math.max(0, Math.min(100, x));
+        y = Math.max(0, Math.min(100, y));
+    
+        selected.style.left = `${x}%`;
+        selected.style.top = `${y}%`;
+        // store as fraction 0–1
+        selected.dataset.x_pct = (x / 100).toFixed(4);
+        selected.dataset.y_pct = (y / 100).toFixed(4);
+    });
+
+    // add a new device
+    document.getElementById("addDevice").addEventListener("click", () => {
+        const name = document.getElementById("name").value || "New Device";
+        const addr = addrSelect.value;
+        const type = document.getElementById("type").value;
+        const color = document.getElementById("color").value;
+
+        if (!addr) {
+        alert("No more free I²C addresses available.");
+        return;
+        }
+
+        const el = document.createElement("div");
+        el.className = `device ${type}`;
+        el.textContent = name;
+        el.style.backgroundColor = color;
+
+        // start in middle
+        el.style.left = "50%";
+        el.style.top = "50%";
+        el.dataset.x_pct = 0.5;
+        el.dataset.y_pct = 0.5;
+
+        el.dataset.id = name.toLowerCase().replace(/\s+/g, "-");
+        el.dataset.addr = addr;
+        el.dataset.type = type;
+
+        canvas.appendChild(el);
+
+        // select it
+        if (selected) selected.classList.remove("selected");
+        selected = el;
+        selected.classList.add("selected");
+        isDragging = false;  // don’t drag immediately
+
+        // remove that address from dropdown
+        removeAddressFromSelect(addr);
+    });
+
+    // delete selected
+    document.getElementById("deleteDevice").addEventListener("click", () => {
+        if (!selected) {
+        alert("No device selected to delete.");
+        return;
+        }
+        const addr = selected.dataset.addr;
+        selected.remove();
+        selected = null;
+        isDragging = false;
+
+        // put address back only if no other device uses it
+        const remaining = Array.from(document.querySelectorAll(".device"));
+        console.log(`remaining:`);
+        console.log(`${remaining}`);
+        const stillUsed = remaining.some(el => el.dataset.addr === addr);
+        if (!stillUsed && addr) {
+        addAddressToSelect(addr);
+        }
+    });
+
+    // save to Flask
+    document.getElementById("saveLayout").addEventListener("click", async () => {
+        const elements = document.querySelectorAll(".device");
+        const devices = Array.from(elements).map(el => {
+        // get from dataset if present
+        let xRaw = el.dataset.x_pct;
+        let yRaw = el.dataset.y_pct;
+
+        // fallback to style if loaded from server and not moved
+        if (xRaw === undefined) {
+            xRaw = parseFloat(el.style.left);   // "50%" -> 50
+        } else {
+            xRaw = parseFloat(xRaw);            // "0.5" -> 0.5
+        }
+
+        if (yRaw === undefined) {
+            yRaw = parseFloat(el.style.top);
+        } else {
+            yRaw = parseFloat(yRaw);
+        }
+
+        // normalize to 0–1
+        const x_pct = xRaw > 1 ? xRaw / 100 : xRaw;
+        const y_pct = yRaw > 1 ? yRaw / 100 : yRaw;
+
+        return {
+            id: el.dataset.id,
+            type: el.dataset.type,
+            name: el.textContent.trim(),
+            i2c_address: el.dataset.addr,
+            x_pct: x_pct,
+            y_pct: y_pct,
+            color: el.style.backgroundColor,
+            shape: el.style.borderRadius === "50%" ? "circle" : "rect",
+            icon: "none"
+        };
+        });
+
+        const resp = await fetch(saveUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ devices })
+        });
+
+        const result = await resp.json();
+        alert(result.status === "ok" ? "Layout saved successfully!" : "Failed to save layout.");
+    });
+    </script>
+{% endblock %}

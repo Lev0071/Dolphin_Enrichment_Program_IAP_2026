@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Dolphin EnrichMent Program {% endblock %}</title>
+
+    <!-- Your main CSS (Bootstrap or custom) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+
+     {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <!-- NAVBAR from System B -->
+    <nav class="navbar navbar--research">
+        <div class="navbar-left">
+
+            <!-- ONE capsule around BOTH logos -->
+            <a class="brand-capsule" href="{{ url_for('main.index') }}" aria-label="Home">
+            <img class="brand-logo logo-griffith"
+                src="{{ url_for('static', filename='griffith-logo.jpg') }}"
+                alt="Griffith University">
+
+            <span class="capsule-divider" aria-hidden="true"></span>
+
+            <img class="brand-logo logo-seaworld"
+                src="{{ url_for('static', filename='SeaWorld.jpg') }}"
+                alt="Sea World">
+            </a>
+
+            <!-- Make title clickable too -->
+            <a class="brand-title-link" href="{{ url_for('main.index') }}">
+            Dolphin Enrichment Program â€“ Prototype Ver. iv
+            </a>
+
+        </div>
+
+        <div class="nav-links">
+            <a href="{{ url_for('main.index') }}">Home</a>
+            <a href="{{ url_for('main.dashboard') }}">Check Peripheral Devices</a>
+            <a href="{{ url_for('main.layout') }}">Layout / Positions Editor</a>
+        </div>
+    </nav>
+
+
+
+    {% block body %}{% endblock %} 
+    {% block extra_scripts %}{% endblock %} 
+</body>
+</html>

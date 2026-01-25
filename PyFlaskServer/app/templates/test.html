@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+   <head>
+      <title>{{ title }}</title>
+      <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+   </head>
+   <body>
+      TESTING PY-TO-HTML
+      <!--This just triggers a function to happen on the server side.-->
+   <form id="testmainForm" method ="GET" action="/pytohtml">
+      <button type="submit">Press the button</button>
+
+   </form>
+   {% if variable.num != None %}
+   {{variable}}
+   {%endif%}
+
+   <!-- Small example of how you can make a basic HTML to python information swap. Use request.form['data_in'] OR name of the input type to get the information in python-->
+
+<form method="POST" action="{{ url_for('htmltopy') }}">
+   Type the Thing<br>
+   <input type="text" name="data_in"><br>
+
+   <input type="submit" value="submit">
+</form>
+
+<!-- Small example of how to click a button and send the data. -->
+
+<div class="grid">
+   {% for i in range(3) %}
+   <div class="row">
+       {% for j in range(3) %}
+       {% set index = i * 3 + j %}
+       <form action="{{ url_for('button_click', button_id=index) }}" method="POST" style="display: inline">
+       <button type="submit" class="cell">
+           {{ index + 1 }} is {% if variable.button_states[index] == 1 %} on{% else %}off{% endif %}
+         </form>
+       </button>
+       {% endfor %}
+   </div>
+   {% endfor %}
+</div>
+
+   </body>
+</html>

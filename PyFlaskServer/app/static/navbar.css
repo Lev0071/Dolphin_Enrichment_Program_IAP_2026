@@ -1,0 +1,224 @@
+/* ---- NAVBAR (global) ---- */
+
+.navbar.navbar--research{
+
+  background: #0d6efd;
+
+  height: 96px;
+
+  padding: 0 16px;
+
+
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 16px;
+
+
+
+  /* prevent â€œmystery extra heightâ€ from line wrapping */
+
+  white-space: nowrap;
+
+}
+
+
+
+.navbar-left{
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 14px;
+
+  min-width: 0; /* helps flex behave */
+
+}
+
+
+
+/* Capsule wraps BOTH logos */
+
+.brand-capsule{
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+
+
+  height: 76px;          /* bigger capsule */
+
+  padding: 10px 16px;    /* more breathing room */
+
+  border-radius: 999px;
+
+
+
+  background: rgba(255,255,255,0.18);
+
+  border: 1px solid rgba(255,255,255,0.28);
+
+
+
+  text-decoration: none;
+
+}
+
+
+
+.brand-capsule:hover{
+
+  background: rgba(255,255,255,0.24);
+
+}
+
+
+
+.capsule-divider{
+
+  width: 1px;
+
+  height: 38px;
+
+  background: rgba(255,255,255,0.40);
+
+}
+
+
+
+/* Logos bigger */
+
+.brand-logo{
+
+  display: block;
+
+  height: 60px;     /* bigger than before */
+
+  width: auto;
+
+  object-fit: contain;
+
+}
+
+
+
+/* Griffith â€œrounded square badgeâ€ */
+
+.logo-griffith{
+
+  width: 60px;          /* keep it square */
+
+  height: 60px;
+
+  border-radius: 14px;  /* rounding */
+
+  background: #c30000;
+
+  padding: 7px;         /* inset so the white mark fits nicely */
+
+}
+
+
+
+/* SeaWorld â€œpillâ€ */
+
+.logo-seaworld{
+
+  height: 50px;
+
+  background: #fff;
+
+  border-radius: 999px;
+
+  padding: 7px 14px;
+
+}
+
+
+
+/* Clickable title */
+
+.brand-title-link{
+
+  color: #fff;
+
+  text-decoration: none;
+
+
+
+  font-weight: 800;
+
+  font-size: 18px;
+
+  line-height: 1;
+
+
+
+  padding: 10px 12px;
+
+  border-radius: 12px;
+
+}
+
+
+
+.brand-title-link:hover{
+
+  background: rgba(255,255,255,0.14);
+
+}
+
+
+
+/* Right-side nav links */
+
+.nav-links{
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 18px;
+
+}
+
+
+
+.nav-links a{
+
+  color: #fff;
+
+  text-decoration: none;
+
+  padding: 8px 10px;
+
+  border-radius: 10px;
+
+}
+
+
+
+.nav-links a:hover{
+
+  background: rgba(255,255,255,0.15);
+
+}
+
+
+
+/* Optional: stop the navbar from crushing on smaller widths */
+
+@media (max-width: 900px){
+
+  .brand-title-link{ display: none; }
+
+}
+

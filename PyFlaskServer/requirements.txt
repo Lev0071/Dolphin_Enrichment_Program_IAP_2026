@@ -1,0 +1,11 @@
+Flask==2.3.2
+Jinja2==3.1.6
+smbus2==0.4.2
+
+# Flask dependencies pinned for stability
+Werkzeug==2.3.7
+itsdangerous==2.1.2
+click==8.1.7
+
+# Optional: accelerating XML if you choose to use lxml (remove if unwanted)
+# lxml==5.2.1

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<h1>Seaworld Homepage</h1>
+<div class="container">
+    <!--- Set flexible displays -->
+    <div class="d-flex">
+        <!--- First third of the screen -->
+        <div class = "leftpane">
+
+        <!--- HTML code for the Hose settings section-->
+        <section>
+        <h2> Buttion section </h2>
+
+        <form action="{{url_for('reboot_rasberry_pi_flask_route')}}">
+            <button> Restart Raspberry Pi</button>
+        </form>
+
+
+    <form action="{{url_for('reset_buttons_flask_route')}}">
+        <button> Reset Buttons</button>
+    </form>
+    
+    <form action="{{url_for('scan_button_pressed_flask')}}">
+        <button> Perform Scan</button>
+    </form>
+    
+    <form action="{{url_for('shutdown_system_flask_route')}}">  
+        <button> Shutdown System</button>
+
+    </form>
+
+    <form action="{{url_for('restart_program_flask_route')}}">
+
+        <button> Restart Program</button>
+
+    </form>
+    
+    <form action="{{url_for('start_random_game_flask_route')}}">
+    
+        <button> Start Random Game</button>
+    </form>
+    
+    
+    <form action="{{url_for('stop_random_game_flask_route')}}">
+    
+        <button>Stop Random Game</button>
+    </form>
+        </section>
+
+
+        <!--- HTML code for the Hose settings section -->
+        <section>
+        <h2> Hose settings section</h2>
+            <!-- HOSE OVERRIDE-->
+
+             <form action="{{ url_for('toggle_override') }}" method="POST">
+                <label>Hose override status:</label>
+                <input type="text" readonly="readonly" value={{serverdata.hose_override}}>
+                <button type="submit">Toggle Override</button>
+             </form>
+
+
+        </section>
+        <!--- HTML code for the co-op button game -->
+
+        <section>
+        <h2> Co-Op button game section</h2>
+        </section>
+
+
+
+        </div>
+
+        <div class = "middlepane">
+            <div class="grid">
+                {% for i in range(3) %}
+                <div class="row">
+                    {% for j in range(3) %}
+                    {% set index = i * 3 + j %}
+                    <form action="{{ url_for('button_click_server', button_id=index) }}" method="POST" style="display: inline">
+                    <button type="submit" class="cell">
+                        {{ index + 1 }} is {% if serverdata.button_states[index] == 1 %} on{% else %}off{% endif %}
+                      </form>
+                    </button>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+             </div>
+        </div>
+
+
+        <div class = "rightpane">
+            {{serverdata.logging_message}}
+            
+            {{serverdata.buttons}}
+            <h2> Flask SSE Example</h2>
+            <div id="message"> </div>
+            <script type="text/javascript">
+                
+                if(typeof(EventSource)!=="undefined"){
+                var source = new EventSource("/stream")
+                
+                source.onmessage=function(event){
+                    var message=document.getElementById("message")
+                    message.innerHTML=event.data
+                };
+            }else{
+                console.log("Your browser doesn't support SSE")
+            }
+                
+            </script>
+            </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
