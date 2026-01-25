@@ -1,0 +1,49 @@
+open PowerShell:
+
+
+cd .....\PyFlaskServer
+
+then run this code:
+
+$Root = (Get-Location).Path   # or set to "C:\...\PyFlaskServer"
+
+# Folders you don't want in the output
+$ExcludeDirs = @(
+  "venv",".venv","__pycache__", ".git",".idea",".vscode",
+  "node_modules",".pytest_cache",".mypy_cache",".ruff_cache",
+  "dist","build",".eggs",".tox",".cache"
+)
+
+# File patterns you don't want in the output
+$ExcludeFilePatterns = @("*.pyc","*.pyo","*.pyd","*.log","Thumbs.db",".DS_Store")
+
+function Show-Tree([string]$Path, [string]$Prefix="") {
+    $items = Get-ChildItem -LiteralPath $Path -Force -ErrorAction SilentlyContinue |
+      Where-Object {
+        if ($_.PSIsContainer) { $ExcludeDirs -notcontains $_.Name }
+        else {
+          $keep = $true
+          foreach ($pat in $ExcludeFilePatterns) {
+            if ($_.Name -like $pat) { $keep = $false; break }
+          }
+          $keep
+        }
+      } |
+      Sort-Object @{Expression="PSIsContainer"; Descending=$true}, Name
+
+    for ($i=0; $i -lt $items.Count; $i++) {
+        $item = $items[$i]
+        $isLast = ($i -eq $items.Count - 1)
+        $branch = if ($isLast) { "└── " } else { "├── " }
+        $name = if ($item.PSIsContainer) { "$($item.Name)\" } else { $item.Name }
+        Write-Output ("$Prefix$branch$name")
+
+        if ($item.PSIsContainer) {
+            $nextPrefix = if ($isLast) { "$Prefix    " } else { "$Prefix│   " }
+            Show-Tree -Path $item.FullName -Prefix $nextPrefix
+        }
+    }
+}
+
+Write-Output $Root
+Show-Tree -Path $Root
