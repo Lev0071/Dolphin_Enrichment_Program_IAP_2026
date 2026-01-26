@@ -1,9 +1,9 @@
-open PowerShell:
+1--- open PowerShell:
 
 
-cd .....\PyFlaskServer
+2--- cd .....\PyFlaskServer
 
-then run this code:
+3--- then run this code:
 
 $Root = (Get-Location).Path   # or set to "C:\...\PyFlaskServer"
 
@@ -47,3 +47,11 @@ function Show-Tree([string]$Path, [string]$Prefix="") {
 
 Write-Output $Root
 Show-Tree -Path $Root
+
+
+4--- Save it to a text file:
+
+$Root = (Get-Location).Path
+# (paste the function block above first, then:)
+Write-Output $Root
+Show-Tree -Path $Root | Out-File -Encoding utf8 structure_clean.txt
