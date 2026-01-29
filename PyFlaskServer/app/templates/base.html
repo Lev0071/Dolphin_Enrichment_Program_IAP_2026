@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} Dolphin EnrichMent Program {% endblock %}</title>
+    <title>{% block title %} Dolphin Enrichment Program {% endblock %}</title>
 
     <!-- Your main CSS (Bootstrap or custom) -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='navbar.css') }}">
 
      {% block extra_head %}{% endblock %}
 </head>
@@ -30,7 +30,7 @@
 
             <!-- Make title clickable too -->
             <a class="brand-title-link" href="{{ url_for('main.index') }}">
-            Dolphin Enrichment Program â€“ Prototype Ver. iv
+            {{ navbar_title or "Dolphin Enrichment Program - Prototype Ver. iv" }}
             </a>
 
         </div>

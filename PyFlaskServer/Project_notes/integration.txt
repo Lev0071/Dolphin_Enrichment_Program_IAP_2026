@@ -19,3 +19,8 @@ https://chatgpt.com/c/6937e0f0-bd70-832f-bd18-3a64517591a3
 | ---------------------------- | -------------------------------- |--------------------------------
 | **Legacy Monolith**          | integratev1.py version           |System A
 | **Modular Blueprint System** | dolphin_enrichment-style project |System B
+
+
+Homepage layout redo:
+DEP_hompage_layout: https://chatgpt.com/g/g-p-69777b8b0ca081919bea2455b1178373-iap-page-layout/c/69772ad3-c814-8320-b25f-8a55c0d67dc3
+DEP_hompage_layout_2: https://chatgpt.com/g/g-p-69777b8b0ca081919bea2455b1178373-iap-page-layout/c/69773e06-758c-8323-b483-43a8d73cab3d

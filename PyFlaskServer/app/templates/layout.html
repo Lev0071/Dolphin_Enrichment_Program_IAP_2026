@@ -80,7 +80,7 @@
     </style>
 
     <link rel="stylesheet" type="text/css"
-          href="{{ url_for('static', filename='styles_iteration_iv_v2.css') }}">
+          href="{{ url_for('static', filename='styles_iteration_iv_v3.css') }}">
 
     <!-- any extra <script> we have in <head> originally can stay here -->
 {% endblock %}
@@ -201,7 +201,7 @@
     
         selected.style.left = `${x}%`;
         selected.style.top = `${y}%`;
-        // store as fraction 0–1
+        // store as fraction 0-1
         selected.dataset.x_pct = (x / 100).toFixed(4);
         selected.dataset.y_pct = (y / 100).toFixed(4);
     });
@@ -287,7 +287,7 @@
             yRaw = parseFloat(yRaw);
         }
 
-        // normalize to 0–1
+        // normalize to 0-1
         const x_pct = xRaw > 1 ? xRaw / 100 : xRaw;
         const y_pct = yRaw > 1 ? yRaw / 100 : yRaw;
 

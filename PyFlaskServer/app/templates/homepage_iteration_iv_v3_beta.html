@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Dolphin Enrichment Program (iter_iv){% endblock %}
+
+{% block extra_head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles_iteration_iv_v3.css') }}">
+
+    <style>
+        /* body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+        padding: 0;
+        } */
+        /* header {
+        background: #0d6efd;
+        color: white;
+        padding: 0.8rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        } */
+        .home-canvas-wrapper .canvas {
+        position: relative;
+        width: 90%;
+        height: 75vh;
+        margin: 2rem auto;
+        border: 2px dashed #ccc;
+        background: white;
+        overflow: hidden;
+        border-radius: 8px;
+        }
+        .home-canvas-wrapper .device {
+        position: absolute;
+        text-align: center;
+        padding: 0.3rem 0.6rem;
+        border-radius: 8px;
+        cursor: grab;
+        font-size: 0.85rem;
+        transform: translate(-50%, -50%);
+        user-select: none;
+        }
+        .home-canvas-wrapper .device.button {
+        background-color: #0d6efd;
+        color: white;
+        }
+        .home-canvas-wrapper .device.other {
+        background-color: #dc3545;
+        color: white;
+        }
+        .home-canvas-wrapper .device.selected {
+        outline: 3px solid #ffc107;
+        z-index: 10;
+        }
+        .home-canvas-wrapper .sidebar {
+        width: 90%;
+        margin: 1rem auto;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 1rem;
+        }
+        .home-canvas-wrapper button {
+        margin-top: 0.5rem;
+        padding: 0.4rem 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #198754;
+        color: white;
+        }
+        .home-canvas-wrapper button:hover {
+        background-color: #157347;
+        }
+        .home-canvas-wrapper  .btn-danger { background: #dc3545; }
+        .home-canvas-wrapper  .btn-danger:hover { background: #bb2d3b; }
+        .home-canvas-wrapper select,.home-canvas-wrapper input {
+        margin: 0.2rem;
+        padding: 0.3rem;
+        }
+    </style>
+{% endblock %}
+    
+{% block body %}
+    <!-- any extra <script> we have in <head> originally can stay here -->
+
+    <div class="container">
+        <!-- HEADER TABS (if we still want to keep them) -->
+        <div class="header">
+            <div class="tab">Home tab</div>
+            <div class="tab">Joystick tab</div>
+
+        </div>
+        
+        <div class="main-content">
+            <!-- LEFT PANEL with logos (unchanged from System A) -->
+            <div class="top-panel">
+
+                <!-- Forms from System A -->
+                <form action="{{url_for('main.reboot_rasberry_pi_flask_route')}}">
+                    <button class="button"> Restart Raspberry Pi</button>
+                </form>
+
+                <form action="{{url_for('main.reset_buttons_flask_route')}}">
+                    <button class="button"> Reset Buttons</button>
+                </form>
+                        
+                <form action="{{url_for('main.restart_program_flask_route')}}">
+
+                    <button class="button"> Restart Program</button>
+
+                </form>
+                            
+                <form action="{{url_for('main.shutdown_system_flask_route')}}">  
+                    <button class="button"> Shutdown System</button>
+
+                </form>
+                            
+                <form action="{{url_for('main.scan_button_pressed_flask')}}">  
+                    <button class="button"> Scan for buttons</button>
+
+                </form>
+        </div>
+
+        <!-- (unchanged) (System A)-->
+        <div class="console">
+
+            <div id="message"> </div>
+            <script type="text/javascript">
+                
+                if(typeof(EventSource)!=="undefined"){
+                var source = new EventSource("/stream")
+                
+                source.onmessage=function(event){
+                    var message=document.getElementById("message")
+                    message.innerHTML=event.data
+                };
+            }else{
+                console.log("Your browser doesn't support SSE")
+            }
+                
+            </script>
+        </div>
+
+        <!-- NEW: HOME PAGE CANVAS (read-only view of devices), from system B-->
+        <div class="home-canvas-wrapper">
+            <div class="canvas" id="home-canvas">
+                {% for d in current_devices %}
+                    <div
+                        class = "device {{d.type}}"
+                        style="
+                        left: {{ d.x_pct * 100 }}%;
+                        top: {{ d.y_pct * 100 }}%;
+                        background-color: {{ d.color }};
+                        border-radius: {% if d.shape == 'circle' %}50%{% else %}8px{% endif %};
+                        "
+                        data-id="{{ d.id }}"
+                        data-addr="{{ d.i2c_address }}"
+                        data-type="{{ d.type }}"
+                        data-x_pct="{{ d.x_pct }}"
+                        data-y_pct="{{ d.y_pct }}"
+                    >
+                        {{ d.name }}
+                    </div>
+                    {% endfor %}
+            </div>
+        </div>
+            
+        <!-- existing keypad, simulate buttons, console, etc. (System A) -->
+         <!-- 
+        <div class="keypad">
+
+                <form action="{{ url_for('main.button_click_server',button_id=0)}}" method="POST"> <button class="connected_button" id="button1">1</button></form>
+                <form action="{{ url_for('main.button_click_server',button_id=1)}}" method="POST"> <button class="connected_button" id="button2">2</button></form>
+                <form action="{{ url_for('main.button_click_server',button_id=2)}}" method="POST"> <button class="connected_button" id="button3">3</button></form>
+                <form action="{{ url_for('main.button_click_server',button_id=3)}}" method="POST"> <button class="connected_button" id="button4">4</button></form>
+                <button class="toggle_button" id="s1">Simulate b1</button>
+                <button class="toggle_button" id="s2">Simulate b2</button>
+                <button class="toggle_button" id="s3">Simulate b3</button>
+                <button class="toggle_button" id="s4">Simulate b4</button>
+
+                <script>
+                    function setupButton(interactivebutton, arduinobutton) {
+                        const button = document.getElementById(interactivebutton);
+                        const square = document.getElementById(arduinobutton);
+
+                        button.addEventListener('mousedown', () => {
+
+                            startSimulatingButton(interactivebutton.replace('button', ''));
+                            
+                        });
+
+                        button.addEventListener('mouseup', () => {
+
+                            stopSimulatingButton(interactivebutton.replace('button', ''));
+                        });
+                    }
+
+                    // Initialize buttons and squares
+                    setupButton('s1', 'button1');
+                    setupButton('s2', 'button2');
+                    setupButton('s3', 'button3');
+                    setupButton('s4','button4')
+
+                    function startSimulatingButton(buttonId) {
+                        let formData = new FormData();
+                        fetch(`/start_simulate_press/${buttonId}`, { method: 'POST' })
+                                        .then(response => response)
+                                        .then(data => {
+                                            
+                                        });
+                                
+                    }
+                    function stopSimulatingButton(buttonId){
+                        let formData = new FormData();
+
+
+                        fetch(`/stop_simulate_press/${buttonId}`, { method: 'POST' })
+                                .then(response => response)
+                                .then(data => {
+                                    
+                                });
+                    }
+                </script>
+
+
+        </div>
+        -->
+
+        </div>
+        <!-- lower-content with hose / game controls (unchanged) (System A) -->
+        <div class="lower-content">
+            <div class="left-settings">
+                <div class="hose-control">
+                    <h3 class="section-title">Hose Control</h3>
+                    <div class="control-row">
+                        Hose Override Active:
+                        <input type="text" readonly="readonly" value="{{ 0 }}">
+                        <form action="{{url_for('main.toggle_override')}}" method="POST"><button class="button">Toggle</button></form>
+
+                    </div>
+
+                    <div class="control-row">
+                        Hose Time (seconds):
+                        <form action="{{url_for('main.change_hose_time_flask_route')}}" method="POST">                     
+                            <input type="number" id="hose_time" name="hose_time" value="{{ 0 }}">
+                            <button class="button" type="submit">Set</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="game-controls">
+                    <h3 class="section-title">Game Controls</h3>
+
+                    <div class="random-game">
+                        <h4 class="subsection-title">Random Game</h4>
+                        <div class="control-row">
+                        Random Game Active: 
+                            <input type="text" readonly="readonly" value="{{ 0 }}">
+                        </div>
+                        <div class="control-row">
+                            <a href="/start_random_game" class="button"> Start </a>
+                            <a href="/stop_random_game" class="button"> Stop </a>
+                        </div>
+                    </div>
+
+                    <div class="coop-game">
+                        <h4 class="subsection-title">Co-Op Game</h4>
+                        
+                        <div class="control-row">
+                            Co-Op Button Time Window (Seconds)
+                            <form action="{{url_for('main.change_coop_button_time')}}" method="POST">  
+                            <input type="number" id="coop_button_time" name="coop_button_time" value="{{ 0 }}">
+                            <button class="button" >Set</button>
+                        </form>
+                        </div>
+                        <div class="control-row">
+                            Co-Op Game Active:
+                            <input type="text" readonly="readonly" value="{{ 0 }}">
+                        </div>
+                        <div class="control-row">
+                            <button href="/start_coop_game" class="button"> Start </button>
+                            <button href="/stop_coop_game" class="button"> Stop </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_scripts %}
+    <script>
+        // here to later add JS to light up devices based on SSE/button state
+    </script>
+{% endblock %}

@@ -38,7 +38,7 @@ def create_app():
     # exit(0)
 
     # Load configuration from config.py (at project root)
-    app.config.from_object("config")
+    app.config.from_object("config") # “Import the Python module named config and copy ALL uppercase variables into app.config.” -- Flask ignores lowercase names
 
     # print(app.config)
     # Config {

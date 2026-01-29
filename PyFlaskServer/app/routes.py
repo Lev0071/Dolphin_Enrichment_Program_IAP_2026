@@ -19,7 +19,10 @@ def index():
     """
     # Adjust this to whatever template you want as your "home" page:
     devices = load_layout_devices()
-    return render_template("homepage_iteration_iv_v2.html", current_devices=devices)
+    # return render_template("homepage_iteration_iv_v2.html", current_devices=devices)
+    return render_template("homepage_iteration_iv_v3_beta.html",
+                           current_devices=devices,
+                           navbar_title = "Dolphin Enrichment Program - Prototype Ver. iv")
 
 @bp.route("/previous")
 def previous():
@@ -44,7 +47,9 @@ def dashboard():
             "value":value if value is not None else "-"
         })
 
-    return render_template("dashboard.html", devices=devices,address_range=available_addrs)
+    return render_template("dashboard.html", 
+                           devices=devices,
+                           address_range=available_addrs,current_devices=devices,navbar_title = "Devices Dashboard - Dolphin Enrichment Program (iter_iv)")
 
 @bp.route("/trigger/<int:addr>/<int:value>")
 def trigger(addr,value):
@@ -90,7 +95,8 @@ def layout():
         "layout.html",
         free_addrs=free_addrs,
         current_devices=current_devices,
-        bus_id=I2C_BUS_ID
+        bus_id=I2C_BUS_ID,
+        navbar_title = "Layout Editor - Dolphin Enrichment Program (iter_iv)"
     )
 
 @bp.route("/layout/save", methods=["POST"])
@@ -120,7 +126,7 @@ def save_layout():
         ET.SubElement(pos, "x_pct").text = str(dev.get("x_pct", 0))
         ET.SubElement(pos, "y_pct").text = str(dev.get("y_pct", 0))
 
-        # style block  – can grow later
+        # style block  - can grow later
         style = ET.SubElement(d, "style")
         ET.SubElement(style, "color").text = dev.get("color", "#0d6efd")
         ET.SubElement(style, "shape").text = dev.get("shape", "rect")
