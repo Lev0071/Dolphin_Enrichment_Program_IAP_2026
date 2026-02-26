@@ -1,0 +1,47 @@
+XML Structure (Schema Style View)
+---------------------------------
+<?xml version="1.0" encoding="utf-8"?>
+<uiLayout>
+    <devices>
+        <device id="DEVICE_ID" type="DEVICE_TYPE">
+            <name>DEVICE_NAME</name>
+            <i2c_address>I2C_ADDRESS</i2c_address>
+
+            <position>
+                <x_pct>X_PERCENT</x_pct>
+                <y_pct>Y_PERCENT</y_pct>
+            </position>
+
+            <style>
+                <color>#HEXCOLOR</color>
+                <shape>rect|circle|...</shape>
+                <icon>ICON_NAME</icon>
+            </style>
+
+        </device>
+        <!-- More <device> blocks possible -->
+    </devices>
+</uiLayout>
+
+Concrete Example
+----------------
+<?xml version="1.0" encoding="utf-8"?>
+<uiLayout>
+    <devices>
+        <device id="btn1" type="button">
+            <name>Left Button</name>
+            <i2c_address>0x08</i2c_address>
+            <position>
+                <x_pct>25</x_pct>
+                <y_pct>60</y_pct>
+            </position>
+            <style>
+                <color>#ff0000</color>
+                <shape>circle</shape>
+                <icon>play</icon>
+            </style>
+        </device>
+    </devices>
+</uiLayout>
+
+# https://chatgpt.com/c/699ba930-7b90-839e-aa26-a9b066fd81c0

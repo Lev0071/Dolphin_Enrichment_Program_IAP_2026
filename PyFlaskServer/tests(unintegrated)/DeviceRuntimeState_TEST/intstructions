@@ -1,0 +1,7 @@
+1. Head to https://www.online-python.com/
+2. copy over the files:
+    - DeviceRuntimeState_TEST.py,
+    - layout_manager.py, and
+    - devices_layout.xml
+
+3. Observe results
