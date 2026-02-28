@@ -1,8 +1,12 @@
 import xml.etree.ElementTree as ET
 from pathlib import Path
+from uuid import uuid4
 
 BASE_DIR = Path(__file__).parent
 LAYOUT_FILE = BASE_DIR / "devices_layout.xml"
+
+def generate_id()->str:
+    return uuid4().hex
 
 def load_layout_devices():
     """
@@ -24,7 +28,10 @@ def load_layout_devices():
 
     devices = []
     for dev in devices_el.findall("device"):
+        uid = dev.get("uid") or generate_id()
+
         devices.append({
+            "uid": uid,
             "id": dev.get("id"),
             "type": dev.get("type"),
             "name": dev.findtext("name", ""),

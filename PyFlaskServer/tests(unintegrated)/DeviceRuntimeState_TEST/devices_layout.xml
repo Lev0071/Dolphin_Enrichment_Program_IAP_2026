@@ -3,7 +3,7 @@
 <uiLayout>
   <devices>
 
-    <device id="btn-1" type="button">
+    <device uid="039acbaf54f7476b9eb3c036a3433de4" id="btn-1" type="button">
       <name>Feed Button</name>
       <i2c_address>0x08</i2c_address>
       <position>
@@ -17,7 +17,7 @@
       </style>
     </device>
 
-    <device id="other-1" type="other">
+    <device uid="ed7694f19d6344ddb0eeb60d1ba48e46" id="other-1" type="other">
       <name>LED Indicator</name>
       <i2c_address>0x09</i2c_address>
       <position>
@@ -32,7 +32,7 @@
     </device>
 
 
-    <device id="btn-feed" type="button">
+    <device uid="141c3486315d487080bf8cce14f0a581" id="btn-feed" type="button">
       <name>Feed Button</name>
       <i2c_address>0x08</i2c_address>
       <position>
@@ -46,7 +46,7 @@
       </style>
     </device>
 
-    <device id="led-water" type="other">
+    <device uid="b506a5f926dc4597bd66996a94fdf80d" id="led-water" type="other">
       <name>Water LED</name>
       <i2c_address>0x09</i2c_address>
       <position>
@@ -60,7 +60,7 @@
       </style>
     </device>
 
-    <device id="solenoid-1" type="other">
+    <device uid="cde065818fe34689befd2fe5cbe26442" id="solenoid-1" type="other">
       <name>Solenoid Valve</name>
       <i2c_address>0x0A</i2c_address>
       <position>

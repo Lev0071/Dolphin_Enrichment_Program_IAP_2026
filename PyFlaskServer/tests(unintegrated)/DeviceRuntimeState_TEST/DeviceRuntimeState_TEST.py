@@ -21,6 +21,7 @@ display_dict_contents(devices)
 @dataclass
 class DeviceRuntimeState:
     # identity / config
+    uid: str
     id: str
     type: str
     name: str
@@ -54,6 +55,7 @@ runtime_states = []
 for dev in devices:
     device_state = DeviceRuntimeState(
         # identity / config
+        uid=dev["uid"],
         id=dev["id"],
         type=dev["type"],
         name=dev["name"],
