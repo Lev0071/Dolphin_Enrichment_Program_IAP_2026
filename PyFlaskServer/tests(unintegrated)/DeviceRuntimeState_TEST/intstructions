@@ -5,3 +5,6 @@
     - devices_layout.xml
 
 3. Observe results
+
+
+python ".\tests(unintegrated)\DeviceRuntimeState_TEST\DeviceRuntimeState_TEST.py"

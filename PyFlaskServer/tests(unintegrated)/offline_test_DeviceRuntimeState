@@ -1,0 +1,234 @@
+go to https://www.online-python.com/
+
+deviceRuntimeState.py
+---------------------
+import layout_manager
+
+from dataclasses import dataclass, asdict
+# from app.utils.layout_manager import load_layout_devices
+from layout_manager import load_layout_devices
+from pprint import pprint
+from typing import Dict, List, Optional, Tuple,Any
+import os
+# print(os.path.abspath(__file__));exit(1)
+
+devices = load_layout_devices()
+# pprint(devices)
+
+def display_dict_contents(devices):
+    for i, dev in enumerate(devices, 1):
+        print(f"\nDevice {i}")
+        print("-" * 30)
+        for key, value in dev.items():
+            print(f"{key:12}: {value}")
+            
+display_dict_contents(devices) 
+
+@dataclass
+class DeviceRuntimeState:
+    # identity / config
+    uid: str
+    id: str
+    type: str
+    name: str
+    i2c_address: str  # keep as string e.g. "0x08" for now
+
+    # layout/style (config)
+    x_pct: float
+    y_pct: float
+    color: str
+    shape: str
+    icon: str
+
+    # classification flags
+    configured: bool = True
+    detected: bool = False
+
+    # professor scope: two actions / two states
+    enabled: bool = False   # toggle
+    pressed: bool = False   # momentary
+
+    # optional helpful metadata
+    last_updated_ts: float = 0.0
+    last_action: str = ""   # e.g. "toggle_on", "press", "release"
+
+    def to_dict(self) -> dict:
+        return asdict(self)
+        
+#-------------------------------------------------------------
+runtime_states = []
+
+for dev in devices:
+    device_state = DeviceRuntimeState(
+        # identity / config
+        uid=dev["uid"],
+        id=dev["id"],
+        type=dev["type"],
+        name=dev["name"],
+        i2c_address=dev["i2c_address"],
+    
+        # layout/style (config)
+        x_pct=dev["x_pct"],
+        y_pct=dev["y_pct"],
+        color=dev["color"],
+        shape=dev["shape"],
+        icon=dev["icon"],
+    )
+    runtime_states.append(device_state.to_dict())
+
+print("===================") 
+print("Show runtime states")   
+print("===================") 
+display_dict_contents(runtime_states) 
+
+
+#============================================================================
+
+devices_layout.xml
+------------------
+<!-- This xml format is how our i2c devices will be enumerated,and allocated on the UI with its assigned positions -->
+
+<uiLayout>
+    <devices>
+
+        <device uid="039acbaf54f7476b9eb3c036a3433de4" id="btn-1" type="button">
+            <name>Feed Button</name>
+            <i2c_address>0x08</i2c_address>
+
+            <position>
+                <x_pct>0.15</x_pct>
+                <y_pct>0.25</y_pct>
+            </position>
+
+            <style>
+                <color>#0d6efd</color>
+                <shape>rounded</shape>
+                <icon>none</icon>
+            </style>
+        </device>
+
+        <device uid="ed7694f19d6344ddb0eeb60d1ba48e46" id="other-1" type="other">
+            <name>LED Indicator</name>
+            <i2c_address>0x09</i2c_address>
+
+            <position>
+                <x_pct>0.4</x_pct>
+                <y_pct>0.5</y_pct>
+            </position>
+
+            <style>
+                <color>#ff0000</color>
+                <shape>circle</shape>
+                <icon>none</icon>
+            </style>
+        </device>
+
+        <device uid="141c3486315d487080bf8cce14f0a581" id="btn-feed" type="button">
+            <name>Feed Button</name>
+            <i2c_address>0x08</i2c_address>
+
+            <position>
+                <x_pct>0.15</x_pct>
+                <y_pct>0.25</y_pct>
+            </position>
+
+            <style>
+                <color>#0d6efd</color>
+                <shape>rounded</shape>
+                <icon>none</icon>
+            </style>
+        </device>
+
+        <device uid="b506a5f926dc4597bd66996a94fdf80d" id="led-water" type="other">
+            <name>Water LED</name>
+            <i2c_address>0x09</i2c_address>
+
+            <position>
+                <x_pct>0.55</x_pct>
+                <y_pct>0.30</y_pct>
+            </position>
+
+            <style>
+                <color>#ff0000</color>
+                <shape>circle</shape>
+                <icon>none</icon>
+            </style>
+        </device>
+
+        <device uid="cde065818fe34689befd2fe5cbe26442" id="solenoid-1" type="other">
+            <name>Solenoid Valve</name>
+            <i2c_address>0x0A</i2c_address>
+
+            <position>
+                <x_pct>0.75</x_pct>
+                <y_pct>0.65</y_pct>
+            </position>
+
+            <style>
+                <color>#198754</color>
+                <shape>rounded</shape>
+                <icon>none</icon>
+            </style>
+        </device>
+
+    </devices>
+</uiLayout>
+
+#============================================================================
+
+layout_manager.py
+-----------------
+import xml.etree.ElementTree as ET
+from pathlib import Path
+from uuid import uuid4
+
+
+BASE_DIR = Path(__file__).parent
+LAYOUT_FILE = BASE_DIR / "devices_layout.xml"
+
+
+def generate_id() -> str:
+    return uuid4().hex
+
+
+def load_layout_devices():
+    """
+    Try to load existing layout.
+    If file/folder doesn't exist or is empty/bad, return empty list.
+    """
+
+    if not LAYOUT_FILE.exists():
+        return []
+
+    try:
+        tree = ET.parse(LAYOUT_FILE)
+        root = tree.getroot()
+
+    except ET.ParseError:
+        return []  # file exists but empty or corrupted
+
+    devices_el = root.find("devices")
+
+    if devices_el is None:
+        return []
+
+    devices = []
+
+    for dev in devices_el.findall("device"):
+
+        uid = dev.get("uid") or generate_id()
+
+        devices.append({
+            "uid": uid,
+            "id": dev.get("id"),
+            "type": dev.get("type"),
+            "name": dev.findtext("name", ""),
+            "i2c_address": dev.findtext("i2c_address", ""),  # ← fixed key name
+            "x_pct": float(dev.findtext("position/x_pct", "0") or 0),
+            "y_pct": float(dev.findtext("position/y_pct", "0") or 0),
+            "color": dev.findtext("style/color", "#0d6efd"),
+            "shape": dev.findtext("style/shape", "rect"),
+            "icon": dev.findtext("style/icon", "none"),
+        })
+
+    return devices

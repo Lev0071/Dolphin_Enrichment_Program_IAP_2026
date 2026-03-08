@@ -1,4 +1,4 @@
-# PyFlaskServer/utils/device_state.py
+# PyFlaskServer/app/utils/device_state.py
 
 from __future__ import annotations
 
@@ -14,10 +14,9 @@ from utils.layout_manager import load_layout_devices
 
 @dataclass
 class DeviceRuntimeState:
-
     # identity / config
-    uid: str  # primary key
-    id: str   # user label
+    uid: str                 # primary key
+    id: str                  # user label
     type: str
     name: str
     i2c_address: str  # keep as string e.g. "0x08" for now
@@ -48,8 +47,7 @@ class DeviceRuntimeState:
 class DeviceStateStore:
     """
     In-memory source of truth for runtime device states.
-    XML is configuration.
-    This store merges XML + detection + UI actions.
+    XML is configuration. This store merges XML + detection + UI actions.
     """
 
     def __init__(self) -> None:
@@ -59,27 +57,20 @@ class DeviceStateStore:
     # -----------------------------
     # Loading / merging configuration
     # -----------------------------
-
     def reload_from_xml(self) -> None:
         """
-        Rebuild store based on XML config,
-        but keep existing runtime flags if possible.
+        Rebuild store based on XML config, but keep existing runtime flags if possible.
         """
-
         configured_devices = load_layout_devices()  # list[dict]
-
         new_map: Dict[str, DeviceRuntimeState] = {}
 
         for d in configured_devices:
-
             dev_id = d.get("id", "").strip()
-            if not dev_id:
-                # is it falsy ie (None,"" (empty string),0,0.0,,False,[],{} )
+            if not dev_id:                                 # is it falsy ie (None,"" (empty string),0,0.0,,False,[],{} )
                 continue
 
             dev_uid = d.get("uid", "").strip()
-            if not dev_uid:
-                # is it falsy ie (None,"" (empty string),0,0.0,,False,[],{} )
+            if not dev_uid:                                 # is it falsy ie (None,"" (empty string),0,0.0,,False,[],{} )
                 continue
 
             prev = self._devices.get(dev_uid)
@@ -115,7 +106,6 @@ class DeviceStateStore:
         Mark devices as detected based on I2C address list.
         For now detected_addrs can come from a MOCK scan.
         """
-
         detected_set = set(detected_addrs)
 
         # update configured devices detection flag
@@ -125,7 +115,6 @@ class DeviceStateStore:
     # -----------------------------
     # Queries
     # -----------------------------
-
     def all_devices(self) -> List[DeviceRuntimeState]:
         return list(self._devices.values())
 
@@ -141,45 +130,34 @@ class DeviceStateStore:
     # -----------------------------
     # Actions (professor requirement)
     # -----------------------------
-
-    def toggle(self, device_uid: str, device_id: str) -> Tuple[bool, str]:
-
+    def toggle(self, device_uid: str,device_id: str) -> Tuple[bool, str]:
         dev = self.get(device_uid)
-
         if not dev:
             return False, f"Unknown device_uid='{device_uid}' (label='{device_id}')"
 
         dev.enabled = not dev.enabled
         dev.last_updated_ts = time.time()
         dev.last_action = "toggle_on" if dev.enabled else "toggle_off"
-
         return True, dev.last_action
 
-    def press(self, device_uid: str, device_id: str) -> Tuple[bool, str]:
-
+    def press(self, device_uid: str,device_id: str) -> Tuple[bool, str]:
         dev = self.get(device_uid)
-
         if not dev:
             return False, f"Unknown device_uid='{device_uid}' (label='{device_id}')"
 
         dev.pressed = True
         dev.last_updated_ts = time.time()
         dev.last_action = "press"
-
         return True, dev.last_action
 
-    def release(self, device_uid: str, device_id: str) -> Tuple[bool, str]:
-
+    def release(self, device_uid: str,device_id: str) -> Tuple[bool, str]:
         dev = self.get(device_uid)
-
         if not dev:
             return False, f"Unknown device_uid='{device_uid}' (label='{device_id}')"
 
         dev.pressed = False
         dev.last_updated_ts = time.time()
         dev.last_action = "release"
-
         return True, dev.last_action
 
-
-# https://chatgpt.com/c/699fa926-1f64-839f-9858-a4380e483238
+        # https://chatgpt.com/c/699fa926-1f64-839f-9858-a4380e483238

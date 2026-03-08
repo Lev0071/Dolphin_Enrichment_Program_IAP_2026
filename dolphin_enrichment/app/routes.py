@@ -5,6 +5,7 @@ from pathlib import Path
 from flask import Blueprint, render_template, redirect, url_for,flash,request,jsonify
 from .hardware.i2c_manager import i2c
 from config import I2C_ADDRESS_RANGE,I2C_BUS_ID
+from uuid import uuid4
 
 bp = Blueprint("main", __name__)
 
@@ -87,6 +88,7 @@ def save_layout():
     for dev in devices:
         d = ET.SubElement(devices_el, "device")
         # attributes on the device tag
+        d.set("uid", dev.get("uid") or uuid4().hex)
         d.set("id", dev.get("id","-"))
         d.set("type",dev.get("type","-"))
 
