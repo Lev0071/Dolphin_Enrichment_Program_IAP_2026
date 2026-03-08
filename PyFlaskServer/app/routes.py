@@ -6,9 +6,18 @@ from pathlib import Path
 from flask import Blueprint, render_template, redirect, url_for,flash,request,jsonify
 from .hardware.i2c_manager import i2c
 from config import I2C_ADDRESS_RANGE,I2C_BUS_ID
+from uuid import uuid4
+from datetime import datetime
+
+# from app.state import store
+from .utils.device_state import DeviceStateStore
+device_store = DeviceStateStore()
 
 # Create a blueprint called "main"
 bp = Blueprint("main", __name__)
+
+def generate_id() -> str:
+    return uuid4().hex
 
 @bp.route("/")
 def index():
@@ -18,7 +27,8 @@ def index():
     Later you can point this to homepage_iteration_three.html or another page.
     """
     # Adjust this to whatever template you want as your "home" page:
-    devices = load_layout_devices()
+    # devices = load_layout_devices()
+    devices = device_store.snapshot_for_ui()
     # return render_template("homepage_iteration_iv_v2.html", current_devices=devices)
     return render_template("homepage_iteration_iv_v3_beta.html",
                            current_devices=devices,
@@ -112,6 +122,7 @@ def save_layout():
     for dev in devices:
         d = ET.SubElement(devices_el, "device")
         # attributes on the device tag
+        d.set("uid", dev.get("uid") or generate_id()) # maintain old UID because DeviceStateStore depends on UID 
         d.set("id", dev.get("id","-"))
         d.set("type",dev.get("type","-"))
 
@@ -139,8 +150,37 @@ def save_layout():
 
     return jsonify({"status":"ok"})
 
+#  ---- Device Runime State routes ----
+@bp.route('/api/state', methods=['POST'])
+def device_state(device_uid:str):
+     pass
+    # call device_store.toggle(device_uid)
 
+@bp.route('/api/device/<device_uid>/toggle', methods=['POST'])
+def device_toggle(device_uid:str):
+     pass
+    # call device_store.toggle(device_uid)
 
+@bp.route('/api/device/<device_uid>/press', methods=['POST'])
+def device_press(device_uid:str):
+     pass
+    # call device_store.press(device_uid)
+
+@bp.route('/api/device/<device_uid>/release', methods=['POST'])
+def device_release(device_uid:str):
+     pass
+    # call device_store.release(device_uid)
+
+   
+@bp.route("/time")
+def system_time():
+     now = datetime.now()
+     return render_template(
+          "system_time.html",
+          current_time = now.strftime("%H:%M:%S"),
+          current_date = now.strftime("%Y-%m-%d"),
+          current_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
+     )
 # ---- System A legacy routes (converted to System B stubs) ----
 
 @bp.route('/reset_buttons_pressed')
