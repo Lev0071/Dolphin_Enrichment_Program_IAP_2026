@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}System Time - Dolphin Enrichment Program{% endblock %}
+
+{% block body %}
+<div style="padding: 2rem;">
+    <h2>System Date and Time</h2>
+    <p><strong>Date:</strong> {{ current_date }}</p>
+    <p><strong>Time:</strong> {{ current_time }}</p>
+    <p><strong>DateTime:</strong> {{ current_datetime }}</p>
+</div>
+{% endblock %}
