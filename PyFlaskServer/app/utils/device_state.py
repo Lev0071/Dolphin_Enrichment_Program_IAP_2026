@@ -65,9 +65,9 @@ class DeviceStateStore:
         new_map: Dict[str, DeviceRuntimeState] = {}
 
         for d in configured_devices:
-            dev_id = d.get("id", "").strip()
-            if not dev_id:                                 # is it falsy ie (None,"" (empty string),0,0.0,,False,[],{} )
-                continue
+            # dev_id = d.get("id", "").strip()
+            # if not dev_id:                                 # is it falsy ie (None,"" (empty string),0,0.0,,False,[],{} )
+            #     continue
 
             dev_uid = d.get("uid", "").strip()
             if not dev_uid:                                 # is it falsy ie (None,"" (empty string),0,0.0,,False,[],{} )
