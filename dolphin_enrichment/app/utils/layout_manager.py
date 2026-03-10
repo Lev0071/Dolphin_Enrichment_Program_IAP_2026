@@ -40,10 +40,10 @@ def load_layout_devices():
 
     for dev in devices_el.findall("device"):
 
-        uid = dev.get("uid") or generate_id()
+        # uid = dev.get("uid") or generate_id()
 
         devices.append({
-            "uid": uid,
+            "uid": dev.get("uid") or generate_id(),
             "id": dev.get("id"),
             "type": dev.get("type"),
             "name": dev.findtext("name", ""),

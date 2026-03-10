@@ -154,6 +154,7 @@
                         background-color: {{ d.color }};
                         border-radius: {% if d.shape == 'circle' %}50%{% else %}8px{% endif %};
                         "
+                        data-uid="{{ d.uid }}"
                         data-id="{{ d.id }}"
                         data-addr="{{ d.i2c_address }}"
                         data-type="{{ d.type }}"
