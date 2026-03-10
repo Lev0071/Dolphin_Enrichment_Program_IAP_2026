@@ -8,6 +8,7 @@ from .hardware.i2c_manager import i2c
 from config import I2C_ADDRESS_RANGE,I2C_BUS_ID
 from uuid import uuid4
 from datetime import datetime
+import time
 
 # from app.state import store
 from .utils.device_state import DeviceStateStore
@@ -147,29 +148,41 @@ def save_layout():
     LAYOUT_DIR.mkdir(parents=True, exist_ok=True)
     tree = ET.ElementTree(root)
     tree.write(LAYOUT_FILE,encoding="utf-8",xml_declaration=True)
+    device_store.reload_from_xml() # do not want homepage to show old devices/state until restart or manual reload
 
     return jsonify({"status":"ok"})
 
 #  ---- Device Runime State routes ----
-@bp.route('/api/state', methods=['POST'])
-def device_state(device_uid:str):
-     pass
-    # call device_store.toggle(device_uid)
+@bp.route('/api/state', methods=['GET'])
+def api_state():
+     # device_id = request.args.get("device_id", "")
+     return jsonify({
+          "ts": time.time(),
+          "devices": device_store.snapshot_for_ui()
+     })
 
-@bp.route('/api/device/<device_uid>/toggle', methods=['POST'])
+@bp.route('/api/device/<device_uid>/toggle', methods=['POST']) # e.g: POST /api/device/039acbaf54f7476b9eb3c036a3433de4/toggle?device_id=btn-1
 def device_toggle(device_uid:str):
-     pass
-    # call device_store.toggle(device_uid)
+    device_id = request.args.get("device_id", "")
+    ok,msg = device_store.toggle(device_uid, device_id)
+    return jsonify({"ok":ok,"msg":msg,"device_uid":device_uid,"device_id":device_id}),(200 if ok else 404)
 
 @bp.route('/api/device/<device_uid>/press', methods=['POST'])
 def device_press(device_uid:str):
-     pass
-    # call device_store.press(device_uid)
+    device_id = request.args.get("device_id", "")
+    ok,msg = device_store.press(device_uid, device_id)
+    return jsonify({"ok":ok,"msg":msg,"device_uid":device_uid,"device_id":device_id}),(200 if ok else 404)
 
 @bp.route('/api/device/<device_uid>/release', methods=['POST'])
 def device_release(device_uid:str):
-     pass
-    # call device_store.release(device_uid)
+    device_id = request.args.get("device_id", "")
+    ok,msg = device_store.release(device_uid, device_id)
+    return jsonify({"ok":ok,"msg":msg,"device_uid":device_uid,"device_id":device_id}),(200 if ok else 404)
+
+@bp.route('/api/reload_xml', methods=['POST'])
+def reload_devices():
+    device_store.reload_from_xml()
+    return jsonify({"ok":True,"msg":"reloaded"}),200
 
    
 @bp.route("/time")
@@ -179,7 +192,8 @@ def system_time():
           "system_time.html",
           current_time = now.strftime("%H:%M:%S"),
           current_date = now.strftime("%Y-%m-%d"),
-          current_datetime = now.strftime("%Y-%m-%d %H:%M:%S")
+          current_datetime = now.strftime("%Y-%m-%d %H:%M:%S"),
+          current_timestamp = now.isoformat()
      )
 # ---- System A legacy routes (converted to System B stubs) ----
 
