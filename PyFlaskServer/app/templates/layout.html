@@ -145,6 +145,7 @@
 
     let selected = null;
     let isDragging = false;
+    /*let tempIdCounter = 0;*/
 
     function removeAddressFromSelect(addr) {
         const opts = Array.from(addrSelect.options);
@@ -233,6 +234,7 @@
         el.dataset.id = name.toLowerCase().replace(/\s+/g, "-");
         el.dataset.addr = addr;
         el.dataset.type = type;
+        /*el.dataset.clientTempId = `tmp-${Date.now()}-${tempIdCounter++}`;*/
 
         canvas.appendChild(el);
 
@@ -293,7 +295,8 @@
         const y_pct = yRaw > 1 ? yRaw / 100 : yRaw;
 
         return {
-            uid: el.dataset.uid,
+            uid: el.dataset.uid || null, /* new devices have no uid,only the ones loaded from XML */
+            /*client_temp_id: el.dataset.clientTempId || null,*/
             id: el.dataset.id,
             type: el.dataset.type,
             name: el.textContent.trim(),
@@ -312,8 +315,17 @@
         body: JSON.stringify({ devices })
         });
 
+        // const result = await resp.json();
+        // alert(result.status === "ok" ? "Layout saved successfully!" : "Failed to save layout.");
         const result = await resp.json();
-        alert(result.status === "ok" ? "Layout saved successfully!" : "Failed to save layout.");
+        
+        if (result.status === "ok") {
+            alert("Layout saved successfully!");
+            location.reload(); /* reload when saved, so uid is put in div element */
+        } else {
+            alert("Failed to save layout.");
+        }
+
     });
     </script>
 {% endblock %}
