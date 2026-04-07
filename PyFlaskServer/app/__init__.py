@@ -2,6 +2,8 @@
 # app/__init__.py – the app factory
 from flask import Flask
 
+# __init__.py - loads uppercase config values into Flask config.
+
 def create_app():
     """
     Application factory for the PyFlaskServer project.
